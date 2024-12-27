@@ -1,8 +1,8 @@
 import { Input } from "@material-tailwind/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 
-const AutocompleteSearch = ({ onPlaceSelected }) => {
+export default function AutocompleteSearch({ onPlaceSelected }) {
   useEffect(() => {
     const input = document.getElementById("autocomplete");
     const autocomplete = new google.maps.places.Autocomplete(input);
@@ -16,10 +16,12 @@ const AutocompleteSearch = ({ onPlaceSelected }) => {
   }, [onPlaceSelected]);
 
   return (
-    <div>
-      <Input id="autocomplete" label="Search" icon={<IoIosSearch />} />
+    <div className="relative">
+      <Input
+        id="autocomplete"
+        label="Search"
+        icon={<IoIosSearch size={20} />}
+      />
     </div>
   );
-};
-
-export default AutocompleteSearch;
+}

@@ -3,18 +3,14 @@ import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import MapNav from "../search/MapNav";
 
-export default function map() {
+export default function MapComponent({ selectedLocation }) {
   const mapRef = useRef();
   const mapContainerRef = useRef();
 
-  const [selectedLocation, setSelectedLocation] = useState("");
-
-  console.log(selectedLocation);
-
+  // Setup for the map
   useEffect(() => {
-    if (map.current) return;
+    if (mapRef.current) return;
     mapboxgl.accessToken =
       "pk.eyJ1IjoiZHVkbGV5c3BlbmNlIiwiYSI6ImNtMTgzMGd0NjB5a2MyanF4ajhxemJueWYifQ.MBrDjlb4vJb-YTDU6ZWmRQ";
     mapRef.current = new mapboxgl.Map({
@@ -26,6 +22,7 @@ export default function map() {
     };
   }, []);
 
+  // adds a marker when the location search is selected
   useEffect(() => {
     if (!selectedLocation) return;
     const geometry = {
@@ -44,13 +41,10 @@ export default function map() {
   }, [selectedLocation]);
 
   return (
-    <div>
-      <MapNav setSelectedLocation={setSelectedLocation} />
-      <div
-        ref={mapContainerRef}
-        className="h-screen w-screen z-0"
-        id="map-container"
-      />
-    </div>
+    <div
+      ref={mapContainerRef}
+      className="h-screen w-screen"
+      id="map-container"
+    />
   );
 }

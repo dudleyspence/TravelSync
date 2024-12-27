@@ -19,6 +19,7 @@
     "axios": "^1.7.9",
     "firebase": "^11.1.0",
     "google-auth-library": "^9.15.0",
+    "lodash.debounce": "^4.0.8",
     "mapbox-gl": "^3.9.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
