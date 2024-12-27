@@ -1,13 +1,17 @@
 import React from "react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import MapSearch from "../search/MapSearch";
+import MapNav from "../search/MapNav";
 
 export default function map() {
   const mapRef = useRef();
   const mapContainerRef = useRef();
+
+  const [selectedLocation, setSelectedLocation] = useState("");
+
+  console.log(selectedLocation);
 
   useEffect(() => {
     mapboxgl.accessToken =
@@ -23,7 +27,7 @@ export default function map() {
 
   return (
     <div>
-      <MapSearch />
+      <MapNav setSelectedLocation={setSelectedLocation} />
       <div
         ref={mapContainerRef}
         className="h-screen w-screen z-0"
