@@ -13,6 +13,7 @@ export default function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [terms, setTerms] = useState(false);
 
   const {
     mutate: createUserSignUp,
@@ -117,6 +118,10 @@ export default function SignupForm() {
 
         <Checkbox
           className="bg-white"
+          checked={terms}
+          onChange={() => {
+            setTerms(!terms);
+          }}
           label={
             <Typography
               variant="small"
@@ -140,6 +145,7 @@ export default function SignupForm() {
         )}
 
         <Button
+          disabled={!terms || !name || !email || !password}
           className="mt-6 bg-pink-400"
           fullWidth
           type="submit"

@@ -14,6 +14,7 @@ export default function map() {
   console.log(selectedLocation);
 
   useEffect(() => {
+    if (map.current) return;
     mapboxgl.accessToken =
       "pk.eyJ1IjoiZHVkbGV5c3BlbmNlIiwiYSI6ImNtMTgzMGd0NjB5a2MyanF4ajhxemJueWYifQ.MBrDjlb4vJb-YTDU6ZWmRQ";
     mapRef.current = new mapboxgl.Map({
@@ -24,6 +25,23 @@ export default function map() {
       mapRef.current.remove();
     };
   }, []);
+
+  useEffect(() => {
+    if (!selectedLocation) return;
+    const geometry = {
+      lat: selectedLocation.geometry.location.lat(),
+      lng: selectedLocation.geometry.location.lng(),
+    };
+    if (!mapRef.current) return;
+    mapRef.current.flyTo({
+      center: [geometry.lng, geometry.lat],
+      essential: true,
+      zoom: 14,
+    });
+    new mapboxgl.Marker()
+      .setLngLat([geometry.lng, geometry.lat])
+      .addTo(mapRef.current);
+  }, [selectedLocation]);
 
   return (
     <div>
