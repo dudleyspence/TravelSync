@@ -19,7 +19,10 @@ export default function ItineraryMapPage() {
         selectedLocation={selectedLocation}
         setNearbyPlaces={setNearbyPlaces}
       />
-      <MapComponent selectedLocation={selectedLocation} />
+      <MapComponent
+        selectedLocation={selectedLocation}
+        nearbyPlaces={nearbyPlaces}
+      />
     </div>
   );
 }
