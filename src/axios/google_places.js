@@ -1,11 +1,10 @@
 export async function fetchNearbyPlaces(center, radius, type) {
-  console.log("hello");
   const { Place, SearchNearbyRankPreference } = await google.maps.importLibrary(
     "places"
   );
 
   const request = {
-    fields: ["displayName", "location"],
+    fields: ["location"],
     locationRestriction: {
       center: center,
       radius: radius,
@@ -17,7 +16,10 @@ export async function fetchNearbyPlaces(center, radius, type) {
   };
 
   const { places } = await Place.searchNearby(request);
-  return places;
+
+  const formattedPlaces = places.map((place) => place.Eg);
+
+  return formattedPlaces;
 }
 
 export async function fetchPlaceDetails(place_id) {
@@ -29,6 +31,7 @@ export async function fetchPlaceDetails(place_id) {
   await place.fetchFields({
     fields: [
       "displayName",
+      "location",
       "formattedAddress",
       "editorialSummary",
       "rating",
@@ -45,6 +48,7 @@ export async function fetchPlaceDetails(place_id) {
   });
 
   const detailedPlace = {
+    location: place.location,
     place_id: place.id,
     title: place?.displayName,
     description: place?.editorialSummary,

@@ -3,25 +3,29 @@ import { Button, select, Slider } from "@material-tailwind/react";
 import { ItinerarySidebar } from "../itinerary_list/ItinerarySidebar";
 import AutocompleteSearch from "./Autocomplete";
 import { useQuery } from "@tanstack/react-query";
-import { fetchNearbyPlaces } from "../../../axios";
+import { fetchNearbyPlaces, fetchPlaceDetails } from "../../../axios";
 import debounce from "lodash.debounce";
 import TypeMenu from "./TypeMenu";
 import { RxCross1 } from "react-icons/rx";
+import { useMapContext } from "../../../context/MapContext";
 
-export default function MapNav({
-  selectedLocation,
-  setSelectedLocation,
-  setNearbyPlaces,
-  setSelectedMarker,
-}) {
+export default function MapNav() {
   const [isNearby, setIsNearby] = useState(false);
-  const [radius, setRadius] = useState(500);
   const [slider, setSlider] = useState(50);
-  const [type, setType] = useState("restaurant");
-  const { data, isFetching } = useQuery({
-    queryKey: ["nearbyPlaces", selectedLocation, type, radius],
-    queryFn: () =>
-      fetchNearbyPlaces(selectedLocation.geometry.location, radius, type),
+
+  const {
+    type,
+    radius,
+    setRadius,
+    searchedLocation,
+    setSearchedLocation,
+    setNearbyPlaces,
+    setSelectedMarker,
+  } = useMapContext();
+
+  const { data } = useQuery({
+    queryKey: ["nearbyPlaces", isNearby, searchedLocation, type, radius],
+    queryFn: () => fetchNearbyPlaces(searchedLocation.location, radius, type),
     enabled: isNearby,
     staleTime: 5000,
   });
@@ -29,6 +33,7 @@ export default function MapNav({
   useEffect(() => {
     if (!isNearby) {
       setNearbyPlaces([]);
+      setSelectedMarker(searchedLocation);
     }
   }, [isNearby]);
 
@@ -38,8 +43,9 @@ export default function MapNav({
     }
   }, [data]);
 
-  function onPlaceSelected(place) {
-    setSelectedLocation(place);
+  async function onPlaceSelected(place) {
+    const detailedPlace = await fetchPlaceDetails(place.place_id);
+    setSearchedLocation(detailedPlace);
   }
 
   const debouncedSetRadius = debounce((value) => {
@@ -52,7 +58,7 @@ export default function MapNav({
         <div className="flex flex-row gap-3">
           <AutocompleteSearch onPlaceSelected={onPlaceSelected} />
           <Button
-            disabled={!selectedLocation}
+            disabled={!searchedLocation}
             size="small"
             variant="secondary"
             className="w-[90px] bg-pink-700 px-3"
@@ -68,7 +74,7 @@ export default function MapNav({
               </div>
             )}
           </Button>
-          <ItinerarySidebar setSelectedMarker={setSelectedMarker} />
+          <ItinerarySidebar />
         </div>
         <div
           className={`w-full flex flex-row gap-4 items-center ${
@@ -82,7 +88,7 @@ export default function MapNav({
             defaultValue={50}
             value={slider}
           />
-          <TypeMenu type={type} setType={setType} />
+          <TypeMenu />
         </div>
       </div>
     </div>
