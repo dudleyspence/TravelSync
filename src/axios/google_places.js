@@ -45,6 +45,7 @@ export async function fetchPlaceDetails(place_id) {
   });
 
   const detailedPlace = {
+    place_id: place.id,
     title: place?.displayName,
     description: place?.editorialSummary,
     address: place?.formattedAddress,

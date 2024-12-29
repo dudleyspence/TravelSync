@@ -82,7 +82,7 @@ export default function SelectedPinSummary({
 }) {
   console.log(website);
   return (
-    <Card className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-11/12 max-w-[400px] bg-white px-4 rounded-xl shadow-xl z-40">
+    <Card className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-11/12 max-w-[400px] bg-white px-4 rounded-xl shadow-xl z-10">
       <CardHeader
         color="transparent"
         floated={false}

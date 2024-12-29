@@ -7,6 +7,7 @@ export default function ItineraryMapPage() {
   const { currentItinerary } = useItinerary();
   const [selectedLocation, setSelectedLocation] = useState("");
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
   useEffect(() => {
     console.log(nearbyPlaces);
@@ -17,9 +18,12 @@ export default function ItineraryMapPage() {
       <MapNav
         setSelectedLocation={setSelectedLocation}
         selectedLocation={selectedLocation}
+        setSelectedMarker={setSelectedMarker}
         setNearbyPlaces={setNearbyPlaces}
       />
       <MapComponent
+        selectedMarker={selectedMarker}
+        setSelectedMarker={setSelectedMarker}
         selectedLocation={selectedLocation}
         nearbyPlaces={nearbyPlaces}
       />

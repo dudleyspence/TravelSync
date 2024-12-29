@@ -6,12 +6,15 @@ import { useItinerary } from "../../../context/ItineraryContext";
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-export function ItinerarySidebar() {
+export function ItinerarySidebar({ setSelectedMarker }) {
   const [open, setOpen] = useState(false);
   const { currentItinerary } = useItinerary();
   const navigate = useNavigate();
 
-  const toggleDrawer = () => setOpen(!open);
+  const toggleDrawer = () => {
+    setSelectedMarker(null);
+    setOpen(!open);
+  };
 
   return (
     <>

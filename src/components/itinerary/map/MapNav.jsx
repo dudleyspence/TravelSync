@@ -12,6 +12,7 @@ export default function MapNav({
   selectedLocation,
   setSelectedLocation,
   setNearbyPlaces,
+  setSelectedMarker,
 }) {
   const [isNearby, setIsNearby] = useState(false);
   const [radius, setRadius] = useState(500);
@@ -67,7 +68,7 @@ export default function MapNav({
               </div>
             )}
           </Button>
-          <ItinerarySidebar />
+          <ItinerarySidebar setSelectedMarker={setSelectedMarker} />
         </div>
         <div
           className={`w-full flex flex-row gap-4 items-center ${

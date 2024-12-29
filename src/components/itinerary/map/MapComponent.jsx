@@ -6,12 +6,16 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import SelectedPinSummary from "./SelectedPinSummary";
 import { fetchPlaceDetails } from "../../../axios";
 
-export default function MapComponent({ selectedLocation, nearbyPlaces }) {
+export default function MapComponent({
+  selectedLocation,
+  nearbyPlaces,
+  selectedMarker,
+  setSelectedMarker,
+}) {
   const mapRef = useRef();
   const mapContainerRef = useRef();
   const searchMarkerRef = useRef(null);
   const nearbyMarkersRef = useRef([]);
-  const [selectedMarker, setSelectedMarker] = useState(null);
 
   // Util function to remove nearby places markers
   const clearNearbyMarkers = () => {
@@ -71,7 +75,6 @@ export default function MapComponent({ selectedLocation, nearbyPlaces }) {
         const detailedPlace = await fetchPlaceDetails(
           selectedLocation.place_id
         );
-
         setSelectedMarker(detailedPlace);
       } catch (error) {
         console.error("Error fetching place details:", error);
