@@ -5,11 +5,14 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useItinerary } from "../../../context/ItineraryContext";
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useMapContext } from "../../../context/MapContext";
 
-export function ItinerarySidebar({ setSelectedMarker }) {
+export function ItinerarySidebar() {
   const [open, setOpen] = useState(false);
   const { currentItinerary } = useItinerary();
   const navigate = useNavigate();
+
+  const { setSelectedMarker } = useMapContext();
 
   const toggleDrawer = () => {
     setSelectedMarker(null);

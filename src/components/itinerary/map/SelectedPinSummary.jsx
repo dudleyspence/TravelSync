@@ -69,18 +69,7 @@ function Website({ website }) {
   );
 }
 
-export default function SelectedPinSummary({
-  title,
-  description,
-  address,
-  rating,
-  website,
-  image,
-  type,
-  ratingsCount,
-  googleMaps,
-}) {
-  console.log(website);
+export default function SelectedPinSummary({ selectedMarker }) {
   return (
     <Card className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-11/12 max-w-[400px] bg-white px-4 rounded-xl shadow-xl z-10">
       <CardHeader
@@ -90,35 +79,51 @@ export default function SelectedPinSummary({
         className="mx-0 flex items-center gap-4 pt-0 pb-4"
       >
         <div className="flex w-full flex-col gap-1.5">
-          {title && (
+          {selectedMarker?.title && (
             <Typography variant="h5" color="blue-gray">
-              {title}
+              {selectedMarker.title}
             </Typography>
           )}
           <div className="flex flex-row gap-4 items-center">
-            {rating && <StarIcon rating={rating} ratingsCount={ratingsCount} />}
-            {type && (
+            {selectedMarker?.rating && (
+              <StarIcon
+                rating={selectedMarker.rating}
+                ratingsCount={selectedMarker.ratingCount}
+              />
+            )}
+            {selectedMarker?.type && (
               <Chip
                 variant="ghost"
-                value={type}
+                value={selectedMarker.type}
                 className="text-[9px] font-extrabold px-2"
               />
             )}
           </div>
         </div>
-        {image && (
-          <Avatar size="xl" variant="rounded" src={image} alt={title} />
+        {selectedMarker?.photo && (
+          <Avatar
+            size="xl"
+            variant="rounded"
+            src={selectedMarker.photo}
+            alt={selectedMarker.title}
+          />
         )}
       </CardHeader>
       <CardBody className="p-0">
-        {description && <Typography>{description}</Typography>}
+        {selectedMarker?.description && (
+          <Typography>{selectedMarker.description}</Typography>
+        )}
       </CardBody>
       <CardFooter className="flex flex-row gap-5 w-full justify-start px-0 py-3">
         <Button className="p-1.5 bg-teal-800">
           <MdAddLocationAlt size={25} />
         </Button>
-        {googleMaps && <Directions mapsURI={googleMaps} />}
-        {website && <Website website={website} />}
+        {selectedMarker?.googleMaps && (
+          <Directions mapsURI={selectedMarker.googleMaps} />
+        )}
+        {selectedMarker?.website && (
+          <Website website={selectedMarker.website} />
+        )}
       </CardFooter>
     </Card>
   );

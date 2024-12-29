@@ -1,4 +1,5 @@
 import React from "react";
+import { useMapContext } from "../../../context/MapContext";
 
 const types = [
   "restaurant",
@@ -23,7 +24,8 @@ const types = [
   "zoo",
 ];
 
-export default function TypeMenu({ type, setType }) {
+export default function TypeMenu() {
+  const { type, setType } = useMapContext();
   return (
     <div className="w-full max-w-[150px]">
       <div className="relative">
