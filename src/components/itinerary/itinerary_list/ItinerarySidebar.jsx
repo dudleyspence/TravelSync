@@ -1,32 +1,40 @@
-import React from "react";
-import { Drawer, Card } from "@material-tailwind/react";
+import React, { useState } from "react";
+import { Drawer, Card, Button } from "@material-tailwind/react";
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useItinerary } from "../../../context/ItineraryContext";
+import { FaHome } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export function ItinerarySidebar() {
-  const [open, setOpen] = React.useState(0);
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const { currentItinerary } = useItinerary();
-  console.log(currentItinerary);
+  const navigate = useNavigate();
 
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value);
-  };
-
-  const openDrawer = () => setIsDrawerOpen(true);
-  const closeDrawer = () => setIsDrawerOpen(false);
+  const toggleDrawer = () => setOpen(!open);
 
   return (
     <>
-      <button size="md" onClick={openDrawer}>
-        {isDrawerOpen ? (
-          <XMarkIcon className="h-8 w-8 stroke-2" />
+      <button size="md" onClick={toggleDrawer}>
+        {open ? (
+          <XMarkIcon className="h-8 w-8 stroke-2 cursor-pointer" />
         ) : (
-          <Bars3Icon className="h-8 w-8 stroke-2" />
+          <Bars3Icon className="h-8 w-8 stroke-2 cursor-pointer" />
         )}
       </button>
-      <Drawer open={isDrawerOpen} onClose={closeDrawer}>
+      <Drawer open={open} onClose={toggleDrawer}>
+        <div className="flex flex-row w-full justify-between p-4 pb-2">
+          <Button
+            onClick={() => {
+              navigate("/dashboard");
+            }}
+            className="bg-deep-purple-400 py-2 px-2 cursor-pointer"
+          >
+            <FaHome size={23} />
+          </Button>
+          <XMarkIcon onClick={toggleDrawer} className="h-8 w-8 stroke-2" />
+        </div>
+
         <Card
           color="transparent"
           shadow={false}

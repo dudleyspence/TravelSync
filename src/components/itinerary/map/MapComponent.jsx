@@ -13,14 +13,6 @@ export default function MapComponent({ selectedLocation, nearbyPlaces }) {
   const nearbyMarkersRef = useRef([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
 
-  function createPopupHTML(name, description = null) {
-    return `
-    <div>
-      <h1>${name}</h1>
-      <p>${description}</p>
-    </div>`;
-  }
-
   // Util function to remove nearby places markers
   const clearNearbyMarkers = () => {
     nearbyMarkersRef.current.forEach((marker) => marker.remove());
@@ -54,9 +46,7 @@ export default function MapComponent({ selectedLocation, nearbyPlaces }) {
     console.log(searchMarkerRef);
 
     if (searchMarkerRef.current) {
-      console.log(searchMarkerRef.current);
       searchMarkerRef.current.remove();
-      console.log(searchMarkerRef.current);
       searchMarkerRef.current = null;
     }
 
@@ -64,33 +54,25 @@ export default function MapComponent({ selectedLocation, nearbyPlaces }) {
       center: [geometry.lng, geometry.lat],
       essential: true,
       zoom: 14,
+      speed: 2,
+      curve: 1.5,
     });
 
     const marker = new mapboxgl.Marker({ color: "green" })
       .setLngLat([geometry.lng, geometry.lat])
       .addTo(mapRef.current);
 
+    marker.getElement().style.cursor = "pointer";
+
     marker.getElement().addEventListener("click", async () => {
       console.log(selectedLocation);
 
       try {
-        const detailedPlaceResponse = await fetchPlaceDetails(
+        const detailedPlace = await fetchPlaceDetails(
           selectedLocation.place_id
         );
 
-        const detailedPlace = {
-          title: detailedPlaceResponse?.displayName,
-          description: detailedPlaceResponse?.editorialSummary,
-          address: detailedPlaceResponse?.formattedAddress,
-          rating: detailedPlaceResponse?.rating,
-          website: detailedPlaceResponse?.websiteURI,
-          photos: detailedPlaceResponse?.photos?.[0]?.url,
-        };
-
-        console.log(detailedPlace);
-
         setSelectedMarker(detailedPlace);
-        console.log(detailedPlace);
       } catch (error) {
         console.error("Error fetching place details:", error);
       }
@@ -100,17 +82,33 @@ export default function MapComponent({ selectedLocation, nearbyPlaces }) {
   }, [selectedLocation]);
 
   useEffect(() => {
-    if (!nearbyPlaces || nearbyPlaces.length === 0) return;
-
     if (!mapRef.current) return;
 
     clearNearbyMarkers();
 
+    if (!nearbyPlaces || nearbyPlaces.length === 0) return;
+
     nearbyPlaces.forEach(({ Eg }) => {
       const place = Eg;
-      const pinkMarker = new mapboxgl.Marker({ color: "pink" })
+
+      const pinkMarker = new mapboxgl.Marker({
+        color: "#e91e63",
+        hover: "curser-pointer",
+      })
         .setLngLat([place.location.lng, place.location.lat])
         .addTo(mapRef.current);
+
+      pinkMarker.getElement().style.cursor = "pointer";
+
+      pinkMarker.getElement().addEventListener("click", async () => {
+        try {
+          const detailedPlace = await fetchPlaceDetails(place.id);
+
+          setSelectedMarker(detailedPlace);
+        } catch (error) {
+          console.error("Error fetching place details:", error);
+        }
+      });
 
       // Store each pink marker in markersRef
       nearbyMarkersRef.current.push(pinkMarker);
@@ -131,7 +129,10 @@ export default function MapComponent({ selectedLocation, nearbyPlaces }) {
           address={selectedMarker?.address}
           rating={selectedMarker?.rating}
           website={selectedMarker?.website}
-          image={selectedMarker?.photos}
+          image={selectedMarker?.photo}
+          type={selectedMarker?.type}
+          ratingsCount={selectedMarker?.ratingCount}
+          googleMaps={selectedMarker?.googleMaps}
         />
       )}
     </div>

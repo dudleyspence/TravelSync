@@ -13,7 +13,6 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <div className="bg-green-50 min-h-screen flex flex-col items-center">
             <AppRoutes />
-            <ReactQueryDevtools />
           </div>
         </QueryClientProvider>
       </ItineraryContextProvider>

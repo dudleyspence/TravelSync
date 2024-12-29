@@ -5,6 +5,8 @@ import AutocompleteSearch from "./Autocomplete";
 import { useQuery } from "@tanstack/react-query";
 import { fetchNearbyPlaces } from "../../../axios";
 import debounce from "lodash.debounce";
+import TypeMenu from "./TypeMenu";
+import { RxCross1 } from "react-icons/rx";
 
 export default function MapNav({
   selectedLocation,
@@ -12,7 +14,7 @@ export default function MapNav({
   setNearbyPlaces,
 }) {
   const [isNearby, setIsNearby] = useState(false);
-  const [radius, setRadius] = useState(1000);
+  const [radius, setRadius] = useState(500);
   const [slider, setSlider] = useState(50);
   const [type, setType] = useState("restaurant");
   const { data, isFetching } = useQuery({
@@ -22,6 +24,12 @@ export default function MapNav({
     enabled: isNearby,
     staleTime: 5000,
   });
+
+  useEffect(() => {
+    if (!isNearby) {
+      setNearbyPlaces([]);
+    }
+  }, [isNearby]);
 
   useEffect(() => {
     if (data) {
@@ -39,30 +47,42 @@ export default function MapNav({
 
   return (
     <div className="bg-white max-w-[calc(100vw-16px)] rounded-md p-3 absolute top-0 left-0 z-40 m-2">
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-row gap-2">
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-row gap-3">
           <AutocompleteSearch onPlaceSelected={onPlaceSelected} />
           <Button
             disabled={!selectedLocation}
             size="small"
             variant="secondary"
-            className="w-full bg-pink-700 px-3"
+            className="w-[90px] bg-pink-700 px-3"
             onClick={() => {
               setIsNearby(!isNearby);
             }}
           >
-            {isNearby ? "Single" : "Nearby"}
+            {!isNearby ? (
+              "Nearby"
+            ) : (
+              <div className="w-full flex justify-center items-center">
+                <RxCross1 size={16} />
+              </div>
+            )}
           </Button>
           <ItinerarySidebar />
         </div>
-        <Slider
-          onChange={(e) => setSlider(e.target.value)}
-          onMouseUp={() => debouncedSetRadius(slider * 20)}
-          onTouchEnd={() => debouncedSetRadius(slider * 20)}
-          defaultValue={50}
-          value={slider}
-          className={isNearby ? "block" : "hidden"}
-        />
+        <div
+          className={`w-full flex flex-row gap-4 items-center ${
+            isNearby ? "block" : "hidden"
+          }`}
+        >
+          <Slider
+            onChange={(e) => setSlider(e.target.value)}
+            onMouseUp={() => debouncedSetRadius(slider * 10)}
+            onTouchEnd={() => debouncedSetRadius(slider * 10)}
+            defaultValue={50}
+            value={slider}
+          />
+          <TypeMenu type={type} setType={setType} />
+        </div>
       </div>
     </div>
   );

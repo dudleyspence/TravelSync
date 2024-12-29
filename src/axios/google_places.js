@@ -43,7 +43,18 @@ export async function fetchPlaceDetails(place_id) {
       "businessStatus",
     ],
   });
-  console.log(place.displayName);
-  console.log(place.formattedAddress);
-  return place;
+
+  const detailedPlace = {
+    title: place?.displayName,
+    description: place?.editorialSummary,
+    address: place?.formattedAddress,
+    rating: place?.rating,
+    website: place?.websiteURI,
+    photo: place?.photos[0]?.getURI(),
+    type: place?.primaryTypeDisplayName,
+    ratingCount: place?.userRatingCount,
+    googleMaps: place?.googleMapsURI,
+  };
+
+  return detailedPlace;
 }
