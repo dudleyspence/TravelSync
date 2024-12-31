@@ -1,8 +1,8 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getUserItineraries } from "../../axios/index";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "@material-tailwind/react";
+import { getUserItineraries } from "../../axios/users";
 
 export default function ItinerariesList({ onEnterItinerary }) {
   const { userLoggedIn } = useAuth();
@@ -16,8 +16,6 @@ export default function ItinerariesList({ onEnterItinerary }) {
     queryFn: () => getUserItineraries(userLoggedIn.id),
     enabled: !!userLoggedIn,
   });
-
-  console.log(itineraries);
 
   if (isLoading) return <p>Loading itineraries...</p>;
   if (isError) return <p>Error loading itineraries.</p>;

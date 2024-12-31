@@ -13,6 +13,14 @@ export default function AppRoutes() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/signin" element={<SigninPage />} />
       <Route
+        path="/"
+        element={
+          <ProtectedRoutes>
+            <DashboardPage />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
         path="/dashboard"
         element={
           <ProtectedRoutes>

@@ -1,6 +1,7 @@
 import React from "react";
 import { MdAddLocationAlt } from "react-icons/md";
 import { FiExternalLink } from "react-icons/fi";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import {
   Card,
@@ -12,6 +13,8 @@ import {
   CardFooter,
   Button,
 } from "@material-tailwind/react";
+import { useMapContext } from "../../../context/MapContext";
+import { useAddLocation } from "../../../hooks/itinerary/useAddLocation";
 
 function StarIcon({ rating, ratingsCount }) {
   return (
@@ -69,7 +72,11 @@ function Website({ website }) {
   );
 }
 
-export default function SelectedPinSummary({ selectedMarker }) {
+export default function SelectedPinSummary() {
+  const { selectedMarker, setSelectedMarker } = useMapContext();
+
+  const { mutate: addLocation } = useAddLocation();
+
   return (
     <Card className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-11/12 max-w-[400px] bg-white px-4 rounded-xl shadow-xl z-10">
       <CardHeader
@@ -115,7 +122,20 @@ export default function SelectedPinSummary({ selectedMarker }) {
         )}
       </CardBody>
       <CardFooter className="flex flex-row gap-5 w-full justify-start px-0 py-3">
-        <Button className="p-1.5 bg-teal-800">
+        <Button
+          onClick={() => {
+            console.log(selectedMarker.place_id);
+            addLocation(
+              { place_id: selectedMarker.place_id },
+              {
+                onSuccess: () => {
+                  console.log("location added successfully");
+                },
+              }
+            );
+          }}
+          className="p-1.5 bg-teal-800"
+        >
           <MdAddLocationAlt size={25} />
         </Button>
         {selectedMarker?.googleMaps && (
@@ -124,6 +144,15 @@ export default function SelectedPinSummary({ selectedMarker }) {
         {selectedMarker?.website && (
           <Website website={selectedMarker.website} />
         )}
+        <Chip
+          variant="ghost"
+          value="Close"
+          color="red"
+          onClick={() => {
+            setSelectedMarker(null);
+          }}
+          className="cursor-pointer absolute text-[9px] font-extrabold px-2 bottom-2 right-2"
+        />
       </CardFooter>
     </Card>
   );

@@ -2,7 +2,7 @@
 export * from "./google_places";
 
 // Itinerary events
-export * from "./itinerary_events";
+export * from "./itinerary_locations";
 
 // Itineraries
 export * from "./itineraries";
