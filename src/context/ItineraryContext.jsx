@@ -7,7 +7,14 @@ export function useItinerary() {
 }
 
 export function ItineraryContextProvider({ children }) {
-  const [currentItinerary, setCurrentItinerary] = useState(null);
+  const [currentItinerary, setCurrentItinerary] = useState(() => {
+    const storedItinerary = localStorage.getItem("currentItinerary");
+    return storedItinerary ? JSON.parse(storedItinerary) : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("currentItinerary", JSON.stringify(currentItinerary));
+  }, [currentItinerary]);
 
   const value = {
     currentItinerary,
