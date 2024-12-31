@@ -133,7 +133,7 @@ export default function MapComponent() {
 
     mapRef.current.flyTo({
       center: [location.lng(), location.lat()],
-      zoom: 17,
+      zoom: 15,
       speed: 1.2,
     });
   }, [selectedMarker]);

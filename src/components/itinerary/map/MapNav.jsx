@@ -83,8 +83,8 @@ export default function MapNav() {
         >
           <Slider
             onChange={(e) => setSlider(e.target.value)}
-            onMouseUp={() => debouncedSetRadius(slider * 10)}
-            onTouchEnd={() => debouncedSetRadius(slider * 10)}
+            onMouseUp={() => debouncedSetRadius(slider * 25)}
+            onTouchEnd={() => debouncedSetRadius(slider * 25)}
             defaultValue={50}
             value={slider}
           />
