@@ -10,7 +10,7 @@ import { RxCross1 } from "react-icons/rx";
 import { useMapContext } from "../../../context/MapContext";
 
 export default function MapNav() {
-  const [isNearby, setIsNearby] = useState(false);
+  const { isNearby, setIsNearby } = useMapContext();
   const [slider, setSlider] = useState(50);
 
   const {

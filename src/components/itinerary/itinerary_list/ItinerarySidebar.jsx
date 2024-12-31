@@ -24,7 +24,9 @@ export function ItinerarySidebar() {
   const { setSelectedMarker } = useMapContext();
 
   const toggleDrawer = () => {
-    setSelectedMarker(null);
+    if (!open) {
+      setSelectedMarker(null);
+    }
     setOpen(!open);
   };
 
@@ -57,7 +59,7 @@ export function ItinerarySidebar() {
           </Typography>
         </div>
         <div className="overflow-scroll">
-          <ItineraryList />
+          <ItineraryList toggleDrawer={toggleDrawer} />
         </div>
         <div className="h-[50px] ">
           <Chip

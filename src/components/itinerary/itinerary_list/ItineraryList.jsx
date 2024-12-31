@@ -6,10 +6,14 @@ import { useItinerary } from "../../../context/ItineraryContext";
 import { MdDragIndicator } from "react-icons/md";
 import { Chip } from "@material-tailwind/react";
 import { useReorderItinerary } from "../../../hooks/itinerary/useReorderItinerary";
+import { useMapContext } from "../../../context/MapContext";
+import { FaBullseye } from "react-icons/fa6";
 
-export default function ItineraryList() {
+export default function ItineraryList({ toggleDrawer }) {
   const [locations, setLocations] = useState([]);
   const { currentItinerary } = useItinerary();
+  const { setIsNearby, setSearchedLocation, setSelectedMarker } =
+    useMapContext();
 
   const { data } = useQuery({
     queryKey: ["itineraryDetails", currentItinerary?.id],
@@ -105,7 +109,16 @@ export default function ItineraryList() {
                     {...provided.dragHandleProps}
                   >
                     <div className="flex flex-col justify-start gap-2">
-                      {loc.title}
+                      <a
+                        onClick={() => {
+                          setSearchedLocation(loc);
+                          setSelectedMarker(loc);
+                          setIsNearby(false);
+                          toggleDrawer();
+                        }}
+                      >
+                        {loc.title}
+                      </a>
                       {loc?.type && (
                         <Chip
                           variant="ghost"

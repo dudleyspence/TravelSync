@@ -5,6 +5,7 @@ const MapContext = createContext();
 export function MapProvider({ children }) {
   const [searchedLocation, setSearchedLocation] = useState(null);
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const [isNearby, setIsNearby] = useState(false);
   const [type, setType] = useState("restaurant");
   const [radius, setRadius] = useState(1000);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -22,6 +23,8 @@ export function MapProvider({ children }) {
         setRadius,
         selectedMarker,
         setSelectedMarker,
+        isNearby,
+        setIsNearby,
       }}
     >
       {children}

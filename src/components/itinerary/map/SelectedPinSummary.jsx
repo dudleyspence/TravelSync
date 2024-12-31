@@ -125,7 +125,6 @@ export default function SelectedPinSummary() {
         <Button
           loading={isPending}
           onClick={() => {
-            console.log(selectedMarker.place_id);
             addLocation(
               { place_id: selectedMarker.place_id },
               {
