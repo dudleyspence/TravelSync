@@ -13,6 +13,7 @@ export const addLocationToItinerary = (itinerary_id, place_id) => {
 // re-order itinerary
 export const reorderIntinerary = (itinerary_id, location_ids_order) => {
   console.log(location_ids_order);
+
   return travelSyncAPI
     .put(`/itineraries/${itinerary_id}/reorder`, {
       location_ids_order: location_ids_order,
@@ -53,11 +54,18 @@ export const getUserItineraries = async (user_id) => {
 };
 
 // Creates a new itinerary
-export const createItinerary = (event) => {
+export const createItinerary = (user_id, name) => {
+  console.log(typeof name);
+  console.log(typeof user_id);
   return travelSyncAPI
-    .post(`/itineraries`, { name: event })
+    .post(`/itineraries`, { name: name, user_id: user_id })
     .then(({ data }) => {
-      console.log(data);
       return data;
     });
+};
+
+export const fetchItinerarySummary = (id) => {
+  return travelSyncAPI.get(`/itineraries/${id}/summary`).then(({ data }) => {
+    return data;
+  });
 };

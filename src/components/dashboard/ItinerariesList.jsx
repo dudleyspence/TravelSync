@@ -3,8 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
 import { Button } from "@material-tailwind/react";
 import { getUserItineraries } from "../../axios/users";
+import { ItineraryCard } from "./ItineraryCard";
 
-export default function ItinerariesList({ onEnterItinerary }) {
+export default function ItinerariesList() {
   const { userLoggedIn } = useAuth();
 
   const {
@@ -27,15 +28,10 @@ export default function ItinerariesList({ onEnterItinerary }) {
       ) : (
         <p>Continue Planning...</p>
       )}
-      <ul className="flex flex-col gap-4 mt-5">
+      <ul className="flex flex-row flex-wrap gap-8 mt-5 justify-center">
         {itineraries.map((itinerary) => (
           <li key={itinerary.id}>
-            <Button
-              className="w-full bg-light-blue-800"
-              onClick={() => onEnterItinerary(itinerary)}
-            >
-              {itinerary.name}
-            </Button>
+            <ItineraryCard id={itinerary.id} />
           </li>
         ))}
       </ul>
