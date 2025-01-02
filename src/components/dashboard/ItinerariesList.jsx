@@ -1,7 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
-import { Button } from "@material-tailwind/react";
 import { getUserItineraries } from "../../axios/users";
 import { ItineraryCard } from "./ItineraryCard";
 
@@ -26,7 +25,9 @@ export default function ItinerariesList() {
       {itineraries.length === 0 ? (
         <p>No itineraries found. Create one above.</p>
       ) : (
-        <p>Continue Planning...</p>
+        <p className="text-xl font-bold">
+          Continue planning your next adventure...
+        </p>
       )}
       <ul className="flex flex-row flex-wrap gap-8 mt-5 justify-center">
         {itineraries.map((itinerary) => (

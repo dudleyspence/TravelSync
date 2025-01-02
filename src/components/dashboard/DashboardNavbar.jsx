@@ -49,9 +49,9 @@ export function DashboardNavbar() {
   }, []);
 
   return (
-    <Navbar className="mx-auto max-w-screen-xl px-6 py-3 z-10">
+    <Navbar className="mx-auto max-w-screen-xl px-6 py-2 z-10">
       <div className="flex items-center justify-between text-blue-gray-900">
-        <img src={logo} alt="logo" className="h-16" />
+        <img src={logo} alt="logo" className="h-12" />
         <div className="hidden lg:block">
           <NavList setOpenNav={setOpenNav} />
         </div>

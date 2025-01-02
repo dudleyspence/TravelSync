@@ -7,7 +7,6 @@ export default function DashboardPage() {
   return (
     <div className="page gap-8 max-w-screen-xl">
       <DashboardNavbar />
-
       <ItinerariesList />
     </div>
   );
