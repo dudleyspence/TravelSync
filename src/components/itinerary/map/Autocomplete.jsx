@@ -18,6 +18,7 @@ export default function AutocompleteSearch({ onPlaceSelected }) {
   return (
     <div className="relative">
       <Input
+        className="text-[16px]"
         id="autocomplete"
         label="Search"
         icon={<IoIosSearch size={20} />}
