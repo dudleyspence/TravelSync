@@ -53,7 +53,7 @@ export default function MapNav() {
   }, 500);
 
   return (
-    <div className="bg-white max-w-[calc(100vw-16px)] rounded-md p-3 absolute top-0 left-0 z-40 m-2">
+    <div className="bg-white max-w-[calc(100vw-16px)] rounded-md p-3 fixed top-0 left-0 z-40 m-2">
       <div className="flex flex-col gap-5">
         <div className="flex flex-row gap-3">
           <AutocompleteSearch onPlaceSelected={onPlaceSelected} />
