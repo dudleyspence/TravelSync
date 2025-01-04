@@ -7,7 +7,6 @@ import { MdDragIndicator } from "react-icons/md";
 import { Chip } from "@material-tailwind/react";
 import { useReorderItinerary } from "../../../hooks/itinerary/useReorderItinerary";
 import { useMapContext } from "../../../context/MapContext";
-import { FaBullseye } from "react-icons/fa6";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useDeleteLocation } from "../../../hooks/itinerary/useDeleteLocation";
 
@@ -133,6 +132,7 @@ export default function ItineraryList({ toggleDrawer }) {
                             console.log(loc.location_id);
                             deleteLocation(loc.location_id);
                           }}
+                          className="cursor-pointer"
                         />
                         {loc?.type && (
                           <Chip

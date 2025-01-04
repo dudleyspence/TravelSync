@@ -8,8 +8,9 @@ import debounce from "lodash.debounce";
 import TypeMenu from "./TypeMenu";
 import { RxCross1 } from "react-icons/rx";
 import { useMapContext } from "../../../context/MapContext";
+import ToggleSidebar from "../itinerary_list/ToggleSidebar";
 
-export default function MapNav() {
+export default function MapNav({ toggleDrawer, open }) {
   const { isNearby, setIsNearby } = useMapContext();
   const [slider, setSlider] = useState(50);
 
@@ -74,7 +75,7 @@ export default function MapNav() {
               </div>
             )}
           </Button>
-          <ItinerarySidebar />
+          <ToggleSidebar toggleDrawer={toggleDrawer} open={open} />
         </div>
         <div
           className={`w-full flex flex-row gap-4 items-center ${

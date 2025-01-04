@@ -1,44 +1,18 @@
-import React, { useState } from "react";
-import {
-  Drawer,
-  Card,
-  Button,
-  Chip,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
-} from "@material-tailwind/react";
+import React from "react";
+import { Drawer, Button, Chip, Typography } from "@material-tailwind/react";
 
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useItinerary } from "../../../context/ItineraryContext";
 import { FaHome } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useMapContext } from "../../../context/MapContext";
 import ItineraryList from "./ItineraryList";
 
-export function ItinerarySidebar() {
-  const [open, setOpen] = useState(false);
+export function ItinerarySidebar({ toggleDrawer, open }) {
   const { currentItinerary } = useItinerary();
   const navigate = useNavigate();
-  const { setSelectedMarker } = useMapContext();
-
-  const toggleDrawer = () => {
-    if (!open) {
-      setSelectedMarker(null);
-    }
-    setOpen(!open);
-  };
 
   return (
     <>
-      <button onClick={toggleDrawer}>
-        {open ? (
-          <XMarkIcon className="h-8 w-8 stroke-2 cursor-pointer" />
-        ) : (
-          <Bars3Icon className="h-8 w-8 stroke-2 cursor-pointer" />
-        )}
-      </button>
       <Drawer
         open={open}
         onClose={toggleDrawer}
