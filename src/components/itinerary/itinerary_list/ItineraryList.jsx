@@ -8,6 +8,8 @@ import { Chip } from "@material-tailwind/react";
 import { useReorderItinerary } from "../../../hooks/itinerary/useReorderItinerary";
 import { useMapContext } from "../../../context/MapContext";
 import { FaBullseye } from "react-icons/fa6";
+import { TiDeleteOutline } from "react-icons/ti";
+import { useDeleteLocation } from "../../../hooks/itinerary/useDeleteLocation";
 
 export default function ItineraryList({ toggleDrawer }) {
   const [locations, setLocations] = useState([]);
@@ -39,6 +41,12 @@ export default function ItineraryList({ toggleDrawer }) {
     isPending: updatingOrder,
     error: errorUpdatingOrder,
   } = useReorderItinerary();
+
+  const {
+    mutate: deleteLocation,
+    isPending: deletingLocation,
+    error: errorDeletingLocation,
+  } = useDeleteLocation();
 
   useEffect(() => {
     if (data) {
@@ -119,14 +127,22 @@ export default function ItineraryList({ toggleDrawer }) {
                       >
                         {loc.title}
                       </a>
-                      {loc?.type && (
-                        <Chip
-                          variant="ghost"
-                          color="green"
-                          value={loc.type}
-                          className="text-[9px] text-black font-extrabold px-2 w-fit"
+                      <div className="flex flex-row gap-2 items-center">
+                        <TiDeleteOutline
+                          onClick={() => {
+                            console.log(loc.location_id);
+                            deleteLocation(loc.location_id);
+                          }}
                         />
-                      )}
+                        {loc?.type && (
+                          <Chip
+                            variant="ghost"
+                            color="green"
+                            value={loc.type}
+                            className="text-[9px] text-black font-extrabold px-2 w-fit"
+                          />
+                        )}
+                      </div>
                     </div>
                     <MdDragIndicator size={20} />
                   </div>
@@ -137,6 +153,12 @@ export default function ItineraryList({ toggleDrawer }) {
           </div>
         )}
       </Droppable>
+      {errorUpdatingOrder && (
+        <p>Error updating order: {errorUpdatingOrder.message}</p>
+      )}
+      {errorDeletingLocation && (
+        <p>Error deleting location: {errorDeletingLocation.message}</p>
+      )}
     </DragDropContext>
   );
 }
