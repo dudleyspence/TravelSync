@@ -22,6 +22,7 @@ export default function AutocompleteSearch({ onPlaceSelected }) {
         id="autocomplete"
         label="Search"
         icon={<IoIosSearch size={20} />}
+        style={{ fontSize: "16px", lineHeight: "1.5" }}
       />
     </div>
   );
