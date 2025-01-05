@@ -90,7 +90,7 @@ export default function SelectedPinSummary() {
   }, [selectedMarker]);
 
   return (
-    <Card className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-11/12 max-w-[400px] bg-white px-4 rounded-xl shadow-xl z-10">
+    <Card className="no-zoom fixed bottom-3 left-1/2 transform -translate-x-1/2 w-11/12 max-w-[400px] bg-white px-4 rounded-xl shadow-xl z-10">
       <CardHeader
         color="transparent"
         floated={false}
@@ -138,7 +138,6 @@ export default function SelectedPinSummary() {
           <LocationAddedLottie />
         ) : (
           <Button
-            loading={isPending}
             onClick={() => {
               addLocation(
                 { place_id: selectedMarker.place_id },

@@ -55,6 +55,7 @@ export default function MapNav({ toggleDrawer, open }) {
   async function onPlaceSelected(place) {
     const detailedPlace = await fetchPlaceDetails(place.place_id);
     setSearchedLocation(detailedPlace);
+    setSelectedMarker(detailedPlace);
   }
 
   const debouncedSetRadius = debounce((value) => {

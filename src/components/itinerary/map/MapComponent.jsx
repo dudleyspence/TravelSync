@@ -20,6 +20,7 @@ export default function MapComponent() {
     setSelectedMarker,
     selectedMarker,
     radius,
+    setIsNearby,
   } = useMapContext();
 
   // Util function to remove nearby places markers
@@ -32,6 +33,8 @@ export default function MapComponent() {
   function clearAllMarkers() {
     searchMarkerRef.current.remove();
     searchMarkerRef.current = null;
+    activeMarkerRef.current.remove();
+    activeMarkerRef.current = null;
     clearNearbyMarkers();
   }
 
@@ -63,9 +66,12 @@ export default function MapComponent() {
 
     if (!mapRef.current) return;
 
+    setIsNearby(false);
+
     if (searchMarkerRef.current) {
       clearAllMarkers();
     }
+
     const lattitude = searchedLocation.location.lat();
     const longitude = searchedLocation.location.lng();
 
@@ -77,15 +83,13 @@ export default function MapComponent() {
       curve: 1.5,
     });
 
-    const searchMarker = new mapboxgl.Marker({ color: "green" })
+    const searchMarker = new mapboxgl.Marker({ color: "blue" })
       .setLngLat([longitude, lattitude])
       .addTo(mapRef.current);
 
-    if (activeMarkerRef.current) {
-      setMarkerColor(activeMarkerRef.current, "#e91e63");
-    }
-
-    activeMarkerRef.current = searchMarker;
+    // if (activeMarkerRef.current) {
+    //   setMarkerColor(activeMarkerRef.current, "#e91e63");
+    // }
 
     searchMarker.getElement().style.cursor = "pointer";
     searchMarker.getElement().addEventListener("click", () => {
@@ -96,11 +100,11 @@ export default function MapComponent() {
     });
 
     searchMarkerRef.current = searchMarker;
+    activeMarkerRef.current = searchMarker;
   }, [searchedLocation]);
 
   useEffect(() => {
     if (!mapRef.current) return;
-    if (nearbyPlaces.length === 0) return;
 
     clearNearbyMarkers();
 
@@ -118,9 +122,13 @@ export default function MapComponent() {
       nearbyMarker.getElement().style.cursor = "pointer";
 
       nearbyMarker.getElement().addEventListener("click", async () => {
-        // set old marker to be pink again
+        // set old marker to be pink again unless the old marker is the search marker (then back to blue)
         if (activeMarkerRef.current) {
-          setMarkerColor(activeMarkerRef.current, "#e91e63");
+          if (activeMarkerRef.current === searchMarkerRef.current) {
+            setMarkerColor(searchMarkerRef.current, "blue");
+          } else {
+            setMarkerColor(activeMarkerRef.current, "#e91e63");
+          }
         }
         // set this pink marker to green
         setMarkerColor(nearbyMarker, "green");
@@ -134,8 +142,9 @@ export default function MapComponent() {
       // Store each nearby marker in markersRef
       nearbyMarkersRef.current.push(nearbyMarker);
     });
-
-    mapRef.current.fitBounds(bounds, { padding: 40, maxZoom: 16 });
+    if (nearbyPlaces.length > 0) {
+      mapRef.current.fitBounds(bounds, { padding: 40, maxZoom: 16 });
+    }
   }, [nearbyPlaces, radius]);
 
   useEffect(() => {
