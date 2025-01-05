@@ -14,8 +14,13 @@ export default function MapComponent() {
   const nearbyMarkersRef = useRef([]);
   const activeMarkerRef = useRef(null);
 
-  const { searchedLocation, nearbyPlaces, setSelectedMarker, selectedMarker } =
-    useMapContext();
+  const {
+    searchedLocation,
+    nearbyPlaces,
+    setSelectedMarker,
+    selectedMarker,
+    radius,
+  } = useMapContext();
 
   // Util function to remove nearby places markers
   function clearNearbyMarkers() {
@@ -137,6 +142,19 @@ export default function MapComponent() {
       speed: 1.2,
     });
   }, [selectedMarker]);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+    if (nearbyPlaces.length === 0) return;
+
+    const bounds = new mapboxgl.LngLatBounds();
+    nearbyMarkersRef.current.forEach((marker) => {
+      const { lng, lat } = marker.getLngLat();
+      bounds.extend([lng, lat]);
+    });
+
+    mapRef.current.fitBounds(bounds, { padding: 20, maxZoom: 15 });
+  }, [radius]);
 
   return (
     <div>

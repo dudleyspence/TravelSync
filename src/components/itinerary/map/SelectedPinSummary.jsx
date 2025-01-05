@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdAddLocationAlt } from "react-icons/md";
 import { FiExternalLink } from "react-icons/fi";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -15,6 +15,7 @@ import {
 } from "@material-tailwind/react";
 import { useMapContext } from "../../../context/MapContext";
 import { useAddLocation } from "../../../hooks/itinerary/useAddLocation";
+import LocationAddedLottie from "../../../assets/lottie/LocationAddedLottie";
 
 function StarIcon({ rating, ratingsCount }) {
   return (
@@ -74,8 +75,19 @@ function Website({ website }) {
 
 export default function SelectedPinSummary() {
   const { selectedMarker, setSelectedMarker } = useMapContext();
+  const [showTick, setShowTick] = useState(false);
 
-  const { mutate: addLocation, isPending } = useAddLocation();
+  const { mutate: addLocation, isPending, isSuccess } = useAddLocation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      setShowTick(true);
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    setShowTick(false);
+  }, [selectedMarker]);
 
   return (
     <Card className="fixed bottom-3 left-1/2 transform -translate-x-1/2 w-11/12 max-w-[400px] bg-white px-4 rounded-xl shadow-xl z-10">
@@ -122,22 +134,27 @@ export default function SelectedPinSummary() {
         )}
       </CardBody>
       <CardFooter className="flex flex-row gap-5 w-full justify-start px-0 py-3">
-        <Button
-          loading={isPending}
-          onClick={() => {
-            addLocation(
-              { place_id: selectedMarker.place_id },
-              {
-                onSuccess: () => {
-                  console.log("location added successfully");
-                },
-              }
-            );
-          }}
-          className="p-1.5 bg-teal-800"
-        >
-          {!isPending && <MdAddLocationAlt size={25} />}
-        </Button>
+        {showTick ? (
+          <LocationAddedLottie />
+        ) : (
+          <Button
+            loading={isPending}
+            onClick={() => {
+              addLocation(
+                { place_id: selectedMarker.place_id },
+                {
+                  onSuccess: () => {
+                    console.log("location added successfully");
+                  },
+                }
+              );
+            }}
+            className="p-1.5 bg-teal-800"
+          >
+            {!isPending && <MdAddLocationAlt size={25} />}
+          </Button>
+        )}
+
         {selectedMarker?.googleMaps && (
           <Directions mapsURI={selectedMarker.googleMaps} />
         )}

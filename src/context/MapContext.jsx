@@ -7,7 +7,7 @@ export function MapProvider({ children }) {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [isNearby, setIsNearby] = useState(false);
   const [type, setType] = useState("restaurant");
-  const [radius, setRadius] = useState(1000);
+  const [radius, setRadius] = useState(2000);
   const [selectedMarker, setSelectedMarker] = useState(null);
 
   return (

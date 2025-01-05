@@ -43,6 +43,7 @@ export function CreateItinerary({ setOpenNav }) {
           </Typography>
           <div className="w-72">
             <Input
+              style={{ fontSize: "16px", lineHeight: "1.5" }}
               type="text"
               placeholder="Itinerary Name"
               onChange={(e) => {
