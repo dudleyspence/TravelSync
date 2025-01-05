@@ -151,7 +151,7 @@ export default function SelectedPinSummary() {
             }}
             className="p-1.5 bg-teal-800"
           >
-            {!isPending && <MdAddLocationAlt size={25} />}
+            <MdAddLocationAlt size={25} />
           </Button>
         )}
 
