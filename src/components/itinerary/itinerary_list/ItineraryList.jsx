@@ -121,6 +121,11 @@ export default function ItineraryList({ toggleDrawer }) {
                           setSearchedLocation(loc);
                           setSelectedMarker(loc);
                           setIsNearby(false);
+                          const searchInput =
+                            document.getElementById("autocomplete");
+                          if (searchInput) {
+                            searchInput.value = "";
+                          }
                           toggleDrawer();
                         }}
                       >
