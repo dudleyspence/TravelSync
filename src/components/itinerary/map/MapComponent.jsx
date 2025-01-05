@@ -100,8 +100,11 @@ export default function MapComponent() {
 
   useEffect(() => {
     if (!mapRef.current) return;
+    if (nearbyPlaces.length === 0) return;
 
     clearNearbyMarkers();
+
+    const bounds = new mapboxgl.LngLatBounds();
 
     nearbyPlaces.forEach((place) => {
       const nearbyMarker = new mapboxgl.Marker({
@@ -109,6 +112,8 @@ export default function MapComponent() {
       })
         .setLngLat([place.location.lng, place.location.lat])
         .addTo(mapRef.current);
+
+      bounds.extend([place.location.lng, place.location.lat]);
 
       nearbyMarker.getElement().style.cursor = "pointer";
 
@@ -129,7 +134,9 @@ export default function MapComponent() {
       // Store each nearby marker in markersRef
       nearbyMarkersRef.current.push(nearbyMarker);
     });
-  }, [nearbyPlaces]);
+
+    mapRef.current.fitBounds(bounds, { padding: 40, maxZoom: 16 });
+  }, [nearbyPlaces, radius]);
 
   useEffect(() => {
     if (!selectedMarker || !mapRef.current) return;
@@ -142,19 +149,6 @@ export default function MapComponent() {
       speed: 1.2,
     });
   }, [selectedMarker]);
-
-  useEffect(() => {
-    if (!mapRef.current) return;
-    if (nearbyPlaces.length === 0) return;
-
-    const bounds = new mapboxgl.LngLatBounds();
-    nearbyMarkersRef.current.forEach((marker) => {
-      const { lng, lat } = marker.getLngLat();
-      bounds.extend([lng, lat]);
-    });
-
-    mapRef.current.fitBounds(bounds, { padding: 20, maxZoom: 15 });
-  }, [radius]);
 
   return (
     <div>
