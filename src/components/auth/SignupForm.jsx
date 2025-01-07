@@ -13,7 +13,23 @@ export default function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [terms, setTerms] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function validateForm() {
+    const errors = {};
+    if (!name) errors.name = true;
+    if (!email) errors.email = true;
+    if (!password) errors.password = true;
+    if (!confirmPassword) errors.confirmPassword = true;
+    if (!terms) errors.terms = true;
+    if (password !== confirmPassword) errors.passwordMatch = true;
+
+    setFieldErrors(errors);
+    return Object.values(errors) === 0;
+  }
 
   const {
     mutate: createUserSignUp,
@@ -29,7 +45,21 @@ export default function SignupForm() {
 
   const anySigningUp = isSigningUp || isGoogleSigningIn;
 
-  const errorMessage = signUpError?.message || googleSignInError?.message || "";
+  const errorMessage2 =
+    signUpError?.message || googleSignInError?.message || "";
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!validateForm()) {
+      setErrorMessage("There seems to have been a problem. Please try again");
+      return;
+    }
+
+    if (!anySigningUp) {
+      createUserSignUp({ name, email, password });
+    }
+  }
 
   return (
     <Card color="transparent" shadow={false}>
@@ -41,17 +71,15 @@ export default function SignupForm() {
       </Typography>
 
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          createUserSignUp({ name, email, password });
-        }}
+        onSubmit={handleSubmit}
         className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
       >
         <Button
           loading={anySigningUp}
-          onClick={(event) => {
-            event.preventDefault();
-            googleSignIn();
+          onClick={() => {
+            if (!anySigningUp) {
+              googleSignIn();
+            }
           }}
           size="sm"
           variant="outlined"
@@ -80,7 +108,11 @@ export default function SignupForm() {
             placeholder="John Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className=" !border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            className={
+              fieldErrors.name
+                ? "!border-red-500 !border-t-red-500 focus:!border-t-red-500 bg-white"
+                : "border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            }
             labelProps={{
               className: "before:content-none after:content-none",
             }}
@@ -94,7 +126,11 @@ export default function SignupForm() {
             placeholder="name@mail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className=" !border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            className={
+              fieldErrors.email
+                ? "!border-red-500 !border-t-red-500 focus:!border-t-red-500 bg-white"
+                : "border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            }
             labelProps={{
               className: "before:content-none after:content-none",
             }}
@@ -109,7 +145,29 @@ export default function SignupForm() {
             placeholder="********"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className=" !border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            className={
+              fieldErrors.password
+                ? "!border-red-500 !border-t-red-500 focus:!border-t-red-500 bg-white"
+                : "border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            }
+            labelProps={{
+              className: "before:content-none after:content-none",
+            }}
+          />
+          <Typography variant="h6" color="blue-gray" className="-mb-3">
+            Confirm Password
+          </Typography>
+          <Input
+            type="password"
+            size="lg"
+            placeholder="********"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className={
+              fieldErrors.confirmPassword
+                ? "!border-red-500 !border-t-red-500 focus:!border-t-red-500 bg-white"
+                : "border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            }
             labelProps={{
               className: "before:content-none after:content-none",
             }}
@@ -117,7 +175,9 @@ export default function SignupForm() {
         </div>
 
         <Checkbox
-          className="bg-white"
+          className={
+            fieldErrors.terms ? "!border-red-500 bg-red-50" : " bg-white"
+          }
           checked={terms}
           onChange={() => {
             setTerms(!terms);
@@ -141,11 +201,16 @@ export default function SignupForm() {
         />
 
         {errorMessage && (
-          <span className="text-red-600 font-bold">{errorMessage}</span>
+          <Typography color="red" className="mt-2 text-center">
+            {errorMessage}
+          </Typography>
         )}
-
+        {errorMessage2 && (
+          <Typography color="red" className="mt-2 text-center">
+            {errorMessage2}
+          </Typography>
+        )}
         <Button
-          disabled={!terms || !name || !email || !password}
           className="mt-6 bg-pink-400"
           fullWidth
           type="submit"

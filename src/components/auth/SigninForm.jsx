@@ -12,6 +12,17 @@ export default function SigninForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function validateForm() {
+    const errors = {};
+    if (!email) errors.email = true;
+    if (!password) errors.password = true;
+
+    setFieldErrors(errors);
+    return Object.values(errors) === 0;
+  }
 
   const {
     mutate: emailPasswordSignIn,
@@ -30,7 +41,7 @@ export default function SigninForm() {
 
   const anySigningIn = isSigningIn || isGoogleSigningIn;
 
-  const errorMessage =
+  const errorMessage2 =
     emailSignInError?.message || googleSignInError?.message || "";
 
   function handleDemoMode(event) {
@@ -51,6 +62,12 @@ export default function SigninForm() {
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    if (!validateForm()) {
+      setErrorMessage("There seems to have been a problem. Please try again");
+      return;
+    }
+
     emailPasswordSignIn(
       { email, password },
       {
@@ -123,7 +140,11 @@ export default function SigninForm() {
             placeholder="name@mail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="!border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            className={
+              fieldErrors.email
+                ? "!border-red-500 !border-t-red-500 focus:!border-t-red-500 bg-white"
+                : "border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            }
             labelProps={{
               className: "before:content-none after:content-none",
             }}
@@ -137,7 +158,11 @@ export default function SigninForm() {
             placeholder="********"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="!border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            className={
+              fieldErrors.password
+                ? "!border-red-500 !border-t-red-500 focus:!border-t-red-500 bg-white"
+                : "border-t-blue-gray-200 focus:!border-t-gray-900 bg-white"
+            }
             labelProps={{
               className: "before:content-none after:content-none",
             }}
@@ -145,7 +170,15 @@ export default function SigninForm() {
         </div>
 
         {errorMessage && (
-          <span className="text-red-600 font-bold">{errorMessage}</span>
+          <Typography color="red" className="mt-2 text-center">
+            {errorMessage}
+          </Typography>
+        )}
+
+        {errorMessage2 && (
+          <Typography color="red" className="mt-2 text-center">
+            {errorMessage2}
+          </Typography>
         )}
 
         <Button
